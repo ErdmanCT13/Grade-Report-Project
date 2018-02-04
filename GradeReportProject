@@ -1,0 +1,251 @@
+/* Project 2
+Carl Erdman
+Intro to C++
+4/10/17 */
+
+
+#include <iostream> //include iostream for cin/cout
+#include <string>
+#include <iomanip> // include iomanip for printing out grade report
+
+using namespace std;
+
+void calculategpa(string grades[], double gradevalues[], int numberofgrades);
+
+void inputinfo(string &term, string &studentname, int *numofclasses);
+
+void classinfo (string classshort[], string classdesc[], int classcredits[], string grades[], int numofclasses);
+
+void printreport (string classdesc[], string classshort[], int classcredits[], string lettergrades[], double grades[], int numofclasses);
+
+void printdetails(double grades[], int classcredits[], int numofclasses, string studentname, string term);
+
+main()
+{
+int size=18;
+int numofclasses=0;
+int* numofclassespnter= &numofclasses;
+
+string term="";
+
+string studentname="";
+
+string grades[size];
+double gradevalues[size];
+string classdesc[size];
+string classshort[size];
+int classcredits[size];
+
+
+
+inputinfo(term, studentname, &numofclasses);
+classinfo(classshort, classdesc, classcredits, grades, numofclasses);
+calculategpa(grades, gradevalues, numofclasses);
+printreport(classdesc, classshort, classcredits, grades, gradevalues, numofclasses);
+printdetails(gradevalues, classcredits, numofclasses, studentname, term);
+
+}
+
+
+
+
+void calculategpa(string grades[], double gradevalues[], int numberofgrades) // Calculates gpa before printing
+{
+
+	for (int i=0; i<numberofgrades; i++)
+	{
+		if (grades[i]== "A")
+		{
+			gradevalues[i]= 4.00;
+		}
+		else if (grades[i]== "A-")
+		{
+			gradevalues[i]= 3.7;
+		}
+		else if (grades[i]== "B+")
+		{
+			gradevalues[i]=3.33;
+		}
+		else if (grades[i]== "B")
+		{
+			gradevalues[i]=3.00;
+		}
+		else if (grades[i]== "B-")
+		{
+			gradevalues[i]=2.7;
+		}
+		else if (grades[i]== "C+")
+		{
+			gradevalues[i]=2.30;
+		}
+		else if (grades[i]== "C")
+		{
+			gradevalues[i]=2.00;
+		}
+		else if (grades[i]== "C-")
+		{
+			gradevalues[i]=1.7;
+		}
+		else if (grades[i]== "D+")
+		{
+			gradevalues[i]=1.3;
+		}
+		else if (grades[i]== "D")
+		{
+			gradevalues[i]=1.0;
+		}
+		else if (grades[i]== "D-")
+		{
+			gradevalues[i]=.7;
+		}
+		else if (grades[i]== "F")
+		{
+			gradevalues[i]=0;
+		}
+		else 
+		{
+		cout << "One of the values you entered was is not valid, Please make sure all values are letter grades (A, B, C, D, F)";
+		}
+
+
+	}
+
+}		
+
+
+void inputinfo(string &term, string &studentname, int *numofclasses) // asks user for various inputs 
+{
+cout << "Are you entering grades for spring Fall semester or Spring Semester? (Please enter one): "; // get semester
+getline(cin, term);
+
+cout << "\n\nWhat is your name?\n"; // get name
+getline(cin, studentname);
+
+cout << "\nHow many courses will you be taking this semester?\n"; // 	
+cin >> *numofclasses;
+}
+
+void classinfo (string classshort[], string classdesc[], int classcredits[], string grades[], int numofclasses)
+{
+
+cin.ignore(); // clears stream for getLine
+
+
+	for (int i=0; i<numofclasses; i++) // prompts user to enter class informations
+	{
+		cout << "\nClass: \n";		
+		getline(cin, classshort[i]); // get class name
+		cout << "\nClass Description: \n";
+		getline(cin, classdesc[i]); // get class description
+		cout << "\nCredits (1-5): \n";
+		cin >> classcredits[i]; // get class credits
+			
+
+			if (classcredits[i] < 1 || classcredits[i] > 5)
+			{	
+				cout <<	"The value you entered was invalid!";
+				cout << "\nPlease enter a new value: ";
+				cin >> classcredits[i];
+			}
+			
+
+		cout << "\nLetter grade: \n";
+		cin >> grades[i];
+			
+while (grades[i] != "A" && grades[i] != "A-" && grades[i] != "B+" && grades[i] != "B" && grades[i] != "B-" && grades[i] != "C+" && grades[i] != "C" && grades[i] != "C-" && grades[i] != "D+" &&  grades[i] != "D" && grades[i] != "D-" && grades[i] != "F")
+			{ // check validity of grade input, if input is invalid print error
+		
+				cout << "This is not a valid grade! (Please make sure you entered a letter on the A-F grading scale, and that the letter is capitalized)\n";
+				cin >> grades[i];
+
+
+			}
+	
+
+		cin.ignore(1, '\n');	
+	}
+
+}
+
+void printreport (string classdesc[], string classshort[], int classcredits[], string lettergrades[], double grades[], int numofclasses) // prints out detailed report
+{
+cout << "\n\n\n";
+cout << left << setw(20) << "Class" << left << setw(30) << "Class Desc." << left << setw(15) << "Credits"  << left << setw(10) << "Grade" << left << setw(15) << "Grade Points"; // set width function allows for the allocation of N chars worth of space in an array like object. everything after that is aligned to one side of the allocated space.
+cout << "\n";
+cout << "______________________________________________________________________________________________";
+cout << "\n\n";
+
+	for (int i = 0; i<numofclasses; i++) // iomanip also allows for easy precision setting much like javascript
+	{
+	cout << left << fixed << setw(20) << setprecision(3) << classshort[i] << left << setw(30) << classdesc[i] << left << setw(15) << classcredits[i]  << left << setw(10) << lettergrades[i] << left << setw(15) << grades[i]*classcredits[i] ;	
+	cout << "\n";
+	}
+	
+	
+}	
+
+
+void printdetails(double grades[], int classcredits[], int numofclasses, string studentname, string term)
+{
+double totalcredits=0;
+int totalhours=0;
+double creditsearned=0;
+double creditsattempted=0;
+	
+
+
+
+	for (int j=0; j<numofclasses; j++)
+	{ 
+
+		creditsattempted+=classcredits[j];		
+
+		if (grades[j]>0)
+		{
+			creditsearned+= classcredits[j];
+		}
+
+	}
+
+	for (int i=0; i<numofclasses;i++)
+	{
+		totalcredits+=(grades[i] * classcredits[i]);
+		totalhours += classcredits[i];
+	}
+
+double gpa= totalcredits/creditsattempted;
+
+
+cout << "____________________________________________________________________________________________"; // this code makes use of iomanip to print a visually clean and concise report
+cout << "\n\n\n\n";
+cout << "Academic Report For: " <<  studentname;
+cout << "\nTerm: " << term;
+cout << "\n\nCredits: \n\n" << fixed;
+cout << left << setw(15) <<  "Attempted:\t\t " << left << setw(20) << setprecision(3) << creditsattempted << "\n";
+cout << left << setw(15) <<  "Completed:\t\t " << left << setw(20) << setprecision(3) << creditsearned;
+cout << "\n\n\n\n"; 
+cout << left << setw(30) <<  "GPA Calculation:\n\n\n";
+cout << left << setw(30) <<  "\nGrade Points:  " << left << setw(20) << setprecision(3) << totalcredits;
+cout << left << setw(30) <<  "\nCredits Attempted: " << left << setw(20) << setprecision(3) << creditsattempted;
+cout << left << setw(30) <<  "\nGPA:" << setw(20) << gpa;
+
+	if (gpa > 2.0)
+	{
+		
+		cout << left << setw(30) << "Status: Good Standing";
+	}
+
+	else if (gpa < 2.0 && gpa > 1.0)
+	{
+		cout << left << setw(30) << "Status: Academic Probation";
+	}
+	else
+	{
+		cout << left << setw(30) << "Status: Dismissed";
+	}
+	
+}
+
+		
+
+
